@@ -1,0 +1,27 @@
+
+        div{ 
+            border: 1px solid black; 
+            margin: 20px; 
+            padding: 10px;
+            background-color: aliceblue;
+            box-shadow: 10px 12px rgb(209, 208, 208);
+        }
+        #icono-usuario{ 
+            width: 20%;
+            float: left; 
+        }
+
+        body{
+            text-align: center;
+            font-family: 'Abel', sans-serif;
+            background: linear-gradient(to right, rgb(189, 189, 255), rgb(129, 129, 255))
+        }
+
+        h3{ 
+            text-shadow: 10px 5px black;
+        }
+
+        .pos-fix {
+        position: fixed; 
+        top: 0;
+}
