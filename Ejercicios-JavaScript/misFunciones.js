@@ -1,16 +1,17 @@
 /**
+ * Convierte las unidades ingreasadas por el usuario
  * Descripción
- * @method Nombre de la función
- * @param Parámetro A
- * @param Parámetro B
- * @return Valor que retorna
+ * @method convertirUnidades
+ * @param {string} unidad - Unidad ingresada: metro, pie, pulgada, yarda
+ * @param {number} valor - Valor numerico ingresado por el usuario (puede ser con coma) 
  */
 
-function convertirUnidades(unidad, valor) {
+    let convertirUnidades = (unidad, valor) => {
     let metro, pulgada, pie, yarda;
 
-    console.log(valor); 
-    console.log(isNaN(valor)); 
+    if(valor.includes(" , ")) { 
+        valor = valor.replace(" , ", " . "); 
+    }
 
     if(isNaN(valor)) { 
         alert("El valor ingresado no es correcto"); 
@@ -42,9 +43,92 @@ function convertirUnidades(unidad, valor) {
         }
     }
 
-    document.getElementById("metro").value = metro;
-    document.getElementById("pulgada").value = pulgada;
-    document.getElementById("pie").value = pie;
-    document.getElementById("yarda").value = yarda; 
+    document.getElementById("metro").value = Number (metro).toFixed(2);
+    document.getElementById("pulgada").value = Number (pulgada).toFixed(2);
+    document.getElementById("pie").value = Math.round(pie*100)/100;
+    document.getElementById("yarda").value = Math.round(yarda*100)/100; 
 
-}
+    /**
+    * Convierte grados en radianes y viceversa
+    * @method convertirUnidades
+    * @param {string} id - Grados o Radianes
+    * @param {number} valor - Valor numerico ingresado por el usuario (puede ser con coma) 
+    */
+
+    let convertirGR = (id, valor) =>  { 
+        let cantGrados, cantRadianes; 
+        if(id == "grados"){
+            cantGrados = valor; 
+            cantRadianes = cantGrados*Math.PI/180
+            document.getElementById("radianes").value = cantRadianes; 
+        } else { 
+            cantRadianes = valor;
+            cantGrados = cantRadianes*Math.PI/180
+            document.getElementById("grados").value = cantGrados; 
+        }
+    }
+
+}; 
+
+let mostrarOcultarDiv = (id) => { 
+    const mostrar = id == "mostrarDiv" ? "block" : "none"; 
+    document.getElementsByName("unDiv")[0].style.display = mostrar ; 
+}; 
+
+// if(id==mostrarDiv) { 
+// document.getElementsByName("unDiv")[0].style.display = "block"; 
+//  } else { 
+//    document.getElementsByName("unDiv")[0].style.display = "none";
+// }
+
+let sumar = () => { 
+    let sum_num1 = document.getElementById("nums1").value; 
+    let sum_num2 = document.getElementById("nums2").value;
+
+    if(isNaN(sum_num1) || isNaN(sum_num2)) { 
+        alert("Una de las variables ingresadas no es numérica");
+    } else { 
+        document.getElementById("totalS").value = Number(sum_num1) + Number(sum_num2); 
+    }
+}; 
+
+let restar = () => { 
+    let res_num1 = document.getElementById("numr1").value; 
+    let res_num2 = document.getElementById("numr2").value;
+
+    if(isNaN(res_num1) || isNaN(res_num2)) { 
+        alert("Una de las variables ingresadas no es numérica");
+    } else { 
+        document.getElementById("totalR").value = Number(res_num1) - Number(res_num2); 
+    }
+}; 
+
+let multiplicacion = () => { 
+    let mul_num1 = document.getElementById("numm1").value; 
+    let mul_num2 = document.getElementById("numm2").value;
+
+    if(isNaN(mul_num1) || isNaN(mul_num2)) { 
+        alert("Una de las variables ingresadas no es numérica");
+    } else { 
+        document.getElementById("totalM").value = Number(mul_num1) * Number(mul_num2); 
+    }
+}; 
+
+let division = () => { 
+    let div_num1 = document.getElementById("numd1").value; 
+    let div_num2 = document.getElementById("numd2").value;
+
+    if(isNaN(div_num1) || isNaN(div_num2)) { 
+        alert("Una de las variables ingresadas no es numérica");
+    } else { 
+        if(Number(div_num2) === 0) {
+            alert("No se puede dividir por cero");
+        } else {
+            document.getElementById("totalD").value = Number(div_num1) / Number(div_num2); 
+        }
+    }
+}; 
+
+
+
+

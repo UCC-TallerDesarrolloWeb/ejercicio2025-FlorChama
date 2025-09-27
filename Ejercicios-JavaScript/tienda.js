@@ -58,6 +58,207 @@ const productos = [
     talle: ["XXS", "XS", "S", "M", "L", "XL"],
     precio: 35000,
     web: "https://www.daedo.com/collections/collection-itf-gloves/products/pritf-2022",
-    imagen: "protectores-manos.webp",
+    imagen: "protectores-pie.webp",
   },
 ];
+
+let mostrarCatalogo = (prod = productos) => { 
+  let contenido = ""; 
+  
+  prod.forEach((elemento, id) => { 
+    contenido += `<div>
+      <img src="images/${elemento.imagen}" alt="${elemento.nombre}"> 
+      <h3>${elemento.nombre}</h3>
+      <p>${formatPrice(elemento.precio)}</p>
+      <button type="button" onclick="mostrarModal(${id})"> 
+        Ver Detalle del Producto
+      </button>
+      <button type="button" onclick="agregarAlcarrito(${id})">
+        Agregar al carrito 
+      </button> 
+    </div>`
+  });
+  
+  document.getElementById("mostrar-catalogo").innerHTML = contenido;  
+}; 
+
+let agregarAlcarrito = (id) => {
+  let carritoList = localStorage.getItem("carrito");
+
+  if (carritoList == null) {
+    carritoList = [];
+  } else {
+    carritoList = JSON.parse(carritoList);
+  }
+
+  carritoList.push(id);
+  console.log(carritoList);
+  localStorage.setItem("carrito", JSON.stringify(carritoList));
+  contarProductos(); 
+};
+
+let mostrarCarrito = () => {
+  let contenido = "";
+  const carrito = JSON.parse(localStorage.getItem("carrito"));
+  let total = 0;
+
+  if (carrito != null) {
+    const listProd = []; 
+    const listCant = []; 
+
+    carrito.forEach((num) => {
+      if(!listProd.includes(num)){ 
+        listProd.push(num);
+        listCant.push(1); 
+      }else{ 
+        const inx = listProd.indexOf(num); 
+        listCant[inx] += 1; 
+      }
+    }); 
+
+    listProd.forEach((num, id) => {
+      const element = productos[num];
+      contenido += `<div>
+        <h3>${element.nombre}</h3>
+        <p>${element.precio}</p>
+        <p>Cantidad: ${listCant[id]}</p>
+        <button type="button" onclick="eliminarProducto(${id})">Eliminar Producto</button>
+      </div>`;
+      total += element.precio * listCant[id];
+    });
+    contenido += ` Total: ${total} `;
+    contenido += `<button type="button" onClick="vaciarCarrito()">Vaciar Carrito</button>`;
+  }
+
+  document.getElementById("mostrar-carrito").innerHTML = contenido;
+};
+
+
+let vaciarCarrito = () => { 
+  localStorage.removeItem("carrito");
+  window.location.reload(); 
+  contarProductos(); 
+}
+
+let eliminarProducto = (id) => { 
+  let carritoList = localStorage.getItem("carrito");
+  carritoList = JSON.parse(carritoList); 
+  carritoList.splice(id,1); 
+
+  if(carritoList.length > 0){ 
+    localStorage.setItem("carrito", JSON.stringify(carritoList));
+  }else{
+    localStorage.removeItem("carrito");
+  }
+  contarProductos(); 
+  window.location.reload(); 
+}
+
+let mostrarModal = (id) => { 
+  document.getElementById("modal").style.display = "block";
+  document.getElementById("titulo-producto").innerText = productos[id].nombre; 
+  document.getElementById("descr-producto").innerText = productos[id].description; 
+  document.getElementById("precio-producto").innerText = productos[id].precio
+}; 
+
+let cerrarModal = () => { 
+    document.getElementById("modal").style.display = "none"; 
+}; 
+
+let filtarProductos = () => { 
+  let searchWord = document.getElementById("search").value;
+  let min = document.getElementById("price-min").value;   
+  let max = document.getElementById("price-max").value;   
+  let marca = document.getElementById("marca").value;     // ← existe en tu HTML
+  let prot = document.getElementById("protectores").checked;
+  let entr = document.getElementById("entrenamiento").checked;
+  let dob  = document.getElementById("dobok").checked;
+
+
+  let newLista = productos; 
+
+  if(searchWord){ 
+    newLista = newLista.filter(
+      (prod) => 
+      prod.nombre.toLowerCase().includes(searchWord.toLowerCase()) ||
+      prod.description.toLowerCase().includes(searchWord.toLowerCase())
+    ); 
+  }
+
+  if(min){ 
+    newLista = newLista.filter((prod) => prod.precio >= min); 
+  }
+
+  if(max){ 
+    newLista = newLista.filter((prod) => prod.precio <= max); 
+  }
+  
+  if(marca !== "Todas") { 
+    newLista = newLista.filter((prod) => prod.marca === marca); 
+  }
+
+  let category = []; 
+  prot ? category.push("Protectores") : ""; 
+  entr ? category.push("Entrenamiento") : ""; 
+  dob ? category.push("Dobok") : ""; 
+
+  if(category.length>0){ 
+    newLista = newLista.filter((prod) => category.includes(prod.categoria)); 
+  }
+  mostrarCatalogo(newLista); 
+}; 
+
+let formatPrice = (price) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  }).format(price);
+};
+
+let contarProductos = () => { 
+  const getCart = JSON.parse(localStorage.getItem("carrito")); 
+
+  if (getCart != null) { 
+    document.getElementById("cant-prod").innerText = getCart.length; 
+  }
+};
+
+let ordenarCatalog = () => { 
+  const opt = document.getElementById("order").value; 
+  let newProductos; 
+
+  switch (opt) { 
+    case "menor": 
+      newProductos = productos.sort((a, b) => a.precio - b.precio);
+      break; 
+
+    case "mayor": 
+      newProductos = productos.sort((a, b) => b.precio - a.precio);
+      break; 
+
+    case "a-z": 
+      newProductos = productos.sort((a, b) => { 
+        if (a.nombre.toUpperCase() < b.nombre.toUpperCase()) { 
+          return -1; 
+        } else { 
+          return 1; 
+        }
+      });
+      break;
+
+    case "z-a": 
+      newProductos = productos.sort((a, b) => { 
+        if (a.nombre.toUpperCase() > b.nombre.toUpperCase()) { 
+          return -1; 
+        } else { 
+          return 1; 
+        }
+      });
+      break;  
+
+    default: 
+      newProductos = productos;
+  }
+
+  mostrarCatalogo(newProductos); 
+};
