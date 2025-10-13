@@ -1,0 +1,41 @@
+.activities-container{ 
+    display: flex; 
+    gap: 1rem;
+    padding: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.activity-card{ 
+    border: 1px solid black;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    color: black
+}
+
+h3{ 
+    margin-top: 0;
+}
+
+ul{ 
+    padding-left: 0;
+
+    li{
+        margin-bottom: 0.5rem;
+    }
+}
+
+button{ 
+        background-color: aquamarine;
+        color: blue;
+        padding: 0.5rem 1rem;
+        border: none;
+        cursor: pointer;
+
+        &:hover{ 
+            background-color: lightblue;
+        }
+    }
