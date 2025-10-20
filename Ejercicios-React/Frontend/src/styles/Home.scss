@@ -1,0 +1,43 @@
+.home-page {
+  text-align: center;
+  margin-top: 1rem;
+
+  .titulo-home {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+}
+
+.card-home {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 2rem;
+  justify-items: center;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto; 
+
+  .actividad {
+    text-align: center;
+    transition: transform 0.3s ease;
+    
+    img {
+      width: 350px;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h3 {
+      margin-top: 10px;
+      color: black;
+      font-weight: bold;
+    }
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}
